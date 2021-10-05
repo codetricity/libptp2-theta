@@ -66,28 +66,28 @@ PATH_SEPARATOR=":"
 
 # The host system.
 host_alias=
-host=aarch64-unknown-linux-gnu
+host=x86_64-unknown-linux-gnu
 host_os=linux-gnu
 
 # The build system.
 build_alias=
-build=aarch64-unknown-linux-gnu
+build=x86_64-unknown-linux-gnu
 build_os=linux-gnu
 
 # A sed program that does not truncate output.
-SED="/bin/sed"
+SED="/usr/bin/sed"
 
 # Sed that helps us avoid accidentally triggering echo(1) options like -n.
 Xsed="$SED -e 1s/^X//"
 
 # A grep program that handles long lines.
-GREP="/bin/grep"
+GREP="/usr/bin/grep"
 
 # An ERE matcher.
-EGREP="/bin/grep -E"
+EGREP="/usr/bin/grep -E"
 
 # A literal string matcher.
-FGREP="/bin/grep -F"
+FGREP="/usr/bin/grep -F"
 
 # A BSD- or MS-compatible name lister.
 NM="/usr/bin/nm -B"
@@ -191,7 +191,7 @@ nm_file_list_spec="@"
 lt_sysroot=
 
 # Command to truncate a binary pipe.
-lt_truncate_bin="/bin/dd bs=4096 count=1"
+lt_truncate_bin="/usr/bin/dd bs=4096 count=1"
 
 # The name of the directory that contains temporary libtool files.
 objdir=.libs
@@ -281,10 +281,10 @@ finish_eval=""
 hardcode_into_libs=yes
 
 # Compile-time system search path for libraries.
-sys_lib_search_path_spec="/usr/lib/gcc/aarch64-linux-gnu/7 /usr/lib/aarch64-linux-gnu /usr/lib /lib/aarch64-linux-gnu /lib "
+sys_lib_search_path_spec="/usr/lib/gcc/x86_64-linux-gnu/10 /usr/lib/x86_64-linux-gnu /usr/lib /lib/x86_64-linux-gnu /lib "
 
 # Detected run-time system search path for libraries.
-sys_lib_dlsearch_path_spec="/lib /usr/lib /usr/local/lib/aarch64-linux-gnu /lib/aarch64-linux-gnu /usr/lib/aarch64-linux-gnu /usr/lib/aarch64-linux-gnu/tegra-egl /usr/lib/aarch64-linux-gnu/tegra /usr/local/cuda-10.2/targets/aarch64-linux/lib /usr/lib/aarch64-linux-gnu/fakechroot /usr/lib/aarch64-linux-gnu/libfakeroot /usr/local/lib /usr/lib/aarch64-linux-gnu/tegra "
+sys_lib_dlsearch_path_spec="/lib /usr/lib /usr/local/cuda/targets/x86_64-linux/lib /usr/local/cuda-11/targets/x86_64-linux/lib /usr/local/cuda-11.1/targets/x86_64-linux/lib /usr/lib/x86_64-linux-gnu/libfakeroot /usr/local/lib/i386-linux-gnu /lib/i386-linux-gnu /usr/lib/i386-linux-gnu /usr/local/lib/i686-linux-gnu /lib/i686-linux-gnu /usr/lib/i686-linux-gnu /usr/local/lib /usr/local/lib/x86_64-linux-gnu /lib/x86_64-linux-gnu /usr/lib/x86_64-linux-gnu /lib32 /usr/lib32 /libx32 /usr/libx32 "
 
 # Explicit LT_SYS_LIBRARY_PATH set during ./configure time.
 configure_time_lt_sys_library_path=""
@@ -304,7 +304,7 @@ striplib="strip --strip-unneeded"
 
 
 # The linker used to build libraries.
-LD="/usr/bin/ld"
+LD="/usr/bin/ld -m elf_x86_64"
 
 # How to create reloadable object files.
 reload_flag=" -r"
