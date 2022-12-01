@@ -45,7 +45,7 @@
 
 #define SVALLEN		256
 #define SVALRET(s) { \
-			if (n>=SVALLEN) s[SVALLEN]='\0'; \
+			if (n>=SVALLEN) s[SVALLEN - 1]='\0'; \
 			return s;\
 }
 

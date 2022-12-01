@@ -33,6 +33,7 @@
 #include <sys/mman.h>
 #include <usb.h>
 #include <stdint.h>
+#include <malloc.h>
 
 #ifdef ENABLE_NLS
 #  include <libintl.h>
@@ -260,7 +261,7 @@ ptp_write_func (unsigned char *bytes, unsigned int size, void *data)
 
 /* XXX this one is suposed to return the number of bytes read!!! */
 static short
-ptp_check_int (unsigned char *bytes, unsigned int size, void *data)
+ptp_check_int (unsigned char *bytes, size_t size, void *data)
 {
 	int result;
 	PTP_USB *ptp_usb=(PTP_USB *)data;
@@ -271,7 +272,7 @@ ptp_check_int (unsigned char *bytes, unsigned int size, void *data)
 		result=usb_interrupt_read(ptp_usb->handle, ptp_usb->intep,(char *)bytes,size,ptpcam_usb_timeout);
 	}
 
-	if (verbose>2) fprintf (stderr, "USB_INTERRUPT_READ returned %i, size=%i\n", result, size);
+	if (verbose>2) fprintf (stderr, "USB_INTERRUPT_READ returned %i, size=%lu\n", result, size);
 
 	if (result >= 0) {
 		return result;
@@ -332,7 +333,7 @@ init_ptp_usb (PTPParams* params, PTP_USB* ptp_usb, struct usb_device* dev)
 		}
 		ptp_usb->handle=device_handle;
 
-		usb_control_msg(device_handle, USB_ENDPOINT_IN, USB_REQ_GET_CONFIGURATION, 0, 0, &current_cfg, 1, 1000);
+		usb_control_msg(device_handle, USB_ENDPOINT_IN, USB_REQ_GET_CONFIGURATION, 0, 0, (char*)&current_cfg, 1, 1000);
 		if (dev->config->bConfigurationValue != current_cfg)
 			usb_set_configuration(device_handle, dev->config->bConfigurationValue);
 		usb_claim_interface(device_handle,
@@ -764,7 +765,7 @@ download:
 out:
 		rest_time=interval-(time(NULL)-start_time);
 		if (rest_time>0 && n>0) {
-		    printf("Sleeping for remaining %u seconds.\n",rest_time);
+		    printf("Sleeping for remaining %li seconds.\n",rest_time);
 		    alarm(rest_time);
 		    pause();
 		}
@@ -1682,7 +1683,7 @@ ptp_transaction_getdata (PTPParams* params, PTPContainer* ptp, unsigned int *get
 uint16_t
 ptp_transaction_getdata (PTPParams* params, PTPContainer* ptp, unsigned int *getlen, char** data)
 {
-	return (ptp_transaction(params, ptp, PTP_DP_GETDATA, (unsigned int) getlen, data));
+	return (ptp_transaction(params, ptp, PTP_DP_GETDATA, *getlen, data));
 }
 
 uint16_t
@@ -1691,42 +1692,6 @@ uint16_t
 ptp_transaction_senddata (PTPParams* params, PTPContainer* ptp, unsigned int sendlen, char* data)
 {
 	return (ptp_transaction(params, ptp, PTP_DP_SENDDATA, sendlen, &data));
-}
-
-void ptphack()
-{
-	PTPParams params={};
-	PTP_USB ptp_usb={};
-	struct usb_device *dev;
-	PTPContainer ptp={};
-	int getlen=0;
-
-	char* data=NULL;
-
-	PTPDeviceInfo 	PTPDeviceInfo={};
-	PTPStorageIDs 	PTPStorageIDs={};
-	PTPStorageInfo 	PTPStorageInfo={};
-	PTPObjectHandles 	PTPObjectHandles={};
-	PTPObjectInfo	PTPObjectInfo={};
-	PTPPropDescRangeForm 	PTPPropDescRangeForm={};
-	PTPPropDescEnumForm 	PTPPropDescEnumForm={};
-	PTPDevicePropDesc 	PTPDevicePropDesc={};
-	PTPCANONFolderEntry 	PTPCANONFolderEntry={};
-
-	if (open_camera(0, 0, 0, &ptp_usb, &params, &dev)<0)
-		return;
-
-	raise(SIGINT);
-
-	//ptp_transaction(&params, &ptp, PTP_DP_GETDATA, 0, &dpv);
-	/*
-	 * ptp_transaction_nodata(&params, &ptp)
-	 * ptp_transaction_getdata(&params, &ptp, &getlen, &data)
-	 * ptp_transaction_senddata(&params, &ptp, sendlen, data)
-	 *
-	 */
-	
-	close_camera(&ptp_usb, &params, dev);
 }
 
 /* main program  */

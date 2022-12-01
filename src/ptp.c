@@ -321,8 +321,8 @@ ptp_transaction (PTPParams* params, PTPContainer* ptp,
 			{
 			uint64_t getlen;
 			CHECK_PTP_RC(params->getdata_func(params, ptp,
-				    sendlen?(unsigned int *)(((uint64_t)(&getlen)&0xffffffff00000000)|sendlen):
-				    &getlen,
+				    sendlen?(size_t *)(((uint64_t)(&getlen)&0xffffffff00000000)|sendlen):
+				    (size_t *)&getlen,
 				(unsigned char**)data));
 			}
 			break;
@@ -851,7 +851,6 @@ ptp_sendgenericrequest (PTPParams* params, uint16_t reqcode,
 {
 	PTPContainer ptp;
 	uint16_t ret=0;
-	char *dpv=NULL;
 	
 	if (direction == PTP_DP_GETDATA)
 		*data = NULL;
@@ -889,7 +888,7 @@ ptp_getobjectsizefromproperty(PTPParams *params, uint32_t handle, uint64_t *sz)
 	ptp.Param1 = handle;
 	ptp.Param2 = PTP_OPC_OBJECTSIZE;
 	ptp.Nparam = 2;
-	ret = ptp_transaction(params, &ptp, PTP_DP_GETDATA, 0, &sz);
+	ret = ptp_transaction(params, &ptp, PTP_DP_GETDATA, 0, (char**)&sz);
 
 	return ret;
 }

@@ -14458,10 +14458,12 @@ if test "$HAVE_LE32TOH" != "1"; then
 /* Define aliases for the standard byte swapping macros */
 /* Arguments to these macros must be properly aligned on natural word */
 /* boundaries in order to work properly on all architectures */
-#define htobe16(x) htons(x)
-#define htobe32(x) htonl(x)
-#define be16toh(x) ntohs(x)
-#define be32toh(x) ntohl(x)
+// To avoid clashes with definitions in /usr/include/endian.h.
+// See src/cpp/brainos/hal/ricoh360/tests/Ricoh360Tests.cpp Endian tests.
+#define htobe16_ptpcamera(x) htons(x)
+#define htobe32_ptpcamera(x) htonl(x)
+#define be16toh_ptpcamera(x) ntohs(x)
+#define be32toh_ptpcamera(x) ntohl(x)
 
 #define HTOBE16(x) (x) = htobe16(x)
 #define HTOBE32(x) (x) = htobe32(x)
@@ -14473,13 +14475,15 @@ EOF
  if test $ac_cv_c_bigendian = yes; then
   cat >> "src/libptp-endian.h" << EOF
 /* Define our own extended byte swapping macros for big-endian machines */
-#define htole16(x)      swap16(x)
-#define htole32(x)      swap32(x)
-#define le16toh(x)      swap16(x)
-#define le32toh(x)      swap32(x)
+// To avoid clashes with definitions in /usr/include/endian.h.
+// See src/cpp/brainos/hal/ricoh360/tests/Ricoh360Tests.cpp Endian tests.
+#define htole16_ptpcamera(x)      swap16(x)
+#define htole32_ptpcamera(x)      swap32(x)
+#define le16toh_ptpcamera(x)      swap16(x)
+#define le32toh_ptpcamera(x)      swap32(x)
 
-#define htobe64(x)      (x)
-#define be64toh(x)      (x)
+#define htobe64_ptpcamera(x)      (x)
+#define be64toh_ptpcamera(x)      (x)
 
 #define HTOLE16(x)      (x) = htole16(x)
 #define HTOLE32(x)      (x) = htole32(x)
@@ -14493,12 +14497,14 @@ EOF
  else
   cat >> "src/libptp-endian.h" << EOF
 /* On little endian machines, these macros are null */
-#define htole16(x)      (x)
-#define htole32(x)      (x)
-#define htole64(x)      (x)
-#define le16toh(x)      (x)
-#define le32toh(x)      (x)
-#define le64toh(x)      (x)
+// To avoid clashes with definitions in /usr/include/endian.h.
+// See src/cpp/brainos/hal/ricoh360/tests/Ricoh360Tests.cpp Endian tests.
+#define htole16_ptpcamera(x)      (x)
+#define htole32_ptpcamera(x)      (x)
+#define htole64_ptpcamera(x)      (x)
+#define le16toh_ptpcamera(x)      (x)
+#define le32toh_ptpcamera(x)      (x)
+#define le64toh_ptpcamera(x)      (x)
 
 #define HTOLE16(x)      (void) (x)
 #define HTOLE32(x)      (void) (x)
@@ -14508,8 +14514,10 @@ EOF
 #define LE64TOH(x)      (void) (x)
 
 /* These don't have standard aliases */
-#define htobe64(x)      swap64(x)
-#define be64toh(x)      swap64(x)
+// To avoid clashes with definitions in /usr/include/endian.h.
+// See src/cpp/brainos/hal/ricoh360/tests/Ricoh360Tests.cpp Endian tests.
+#define htobe64_ptpcamera(x)      swap64(x)
+#define be64toh_ptpcamera(x)      swap64(x)
 
 #define HTOBE64(x)      (x) = htobe64(x)
 #define BE64TOH(x)      (x) = be64toh(x)

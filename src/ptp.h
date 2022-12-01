@@ -933,5 +933,10 @@ uint16_t ptp_prop_getcodebyname	(PTPParams* params, char* propname);
 const char* ptp_prop_getvalbyname
 				(PTPParams* params, char* name, uint16_t dpc);
 
+uint16_t
+ptp_transaction (PTPParams* params, PTPContainer* ptp,
+			uint16_t flags, unsigned int sendlen, char** data);
+uint16_t
+ptp_theta_sleepmode (PTPParams* params);
 
 #endif /* __PTP_H__ */
